@@ -1,9 +1,5 @@
 {
     "PROJECT_NAME": "seedinvest_monitor",
-    "AWS_PROFILE_FOR_DOC_DEPLOY": "an-aws-project-name",
-    "S3_BUCKET_FOR_DOC_HOST": "a-s3-bucket-name",
-    
-    "AWS_PROFILE_FOR_DEPLOY": "eq_sanhe",
+    "AWS_PROFILE": "eq_sanhe",
     "S3_BUCKET_FOR_DEPLOY": "eq-sanhe-for-everything"
-    
 }
