@@ -3,6 +3,9 @@ seedinvest_monitor_venv/
 seedinvest_monitor.egg-info/
 seedinvest_monitor-*/
 
+config-final-for-cloudformation.json
+config-final-for-python.json
+config-raw.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
