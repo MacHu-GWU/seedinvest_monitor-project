@@ -1,5 +1,6 @@
-requests
+requests==2.22.0
 pymongo_mate==0.0.4
 mongoengine_mate==0.0.4
-tropopsphere_mate==0.0.10
+troposphere_mate==0.0.11
+pynamodb==4.2.0
 boto3
