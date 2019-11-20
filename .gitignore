@@ -7,6 +7,8 @@ config/config-raw.json
 config/config-final-for-cloudformation.json
 config/config-final-for-python.json
 
+*.html
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
