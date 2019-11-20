@@ -1,5 +1,11 @@
 {
     "PROJECT_NAME": "seedinvest_monitor",
-    "AWS_PROFILE": "eq_sanhe",
-    "S3_BUCKET_FOR_DEPLOY": "eq-sanhe-for-everything"
+    "AWS_PROFILE_FOR_DEPLOY": "eq_sanhe",
+    "AWS_ACCOUNT_ID": "110330507156",
+    "AWS_REGION": "us-east-1",
+    "S3_BUCKET_FOR_DEPLOY": "eq-sanhe-for-everything",
+    "LAMBDA_LAYER_VERSION": "1",
+    "UPDATE_NEW_PROJECT_RATE": "rate(1 minute)",
+    "HTML_UPDATE_INTERVAL_IN_SECONDS": 86400,
+    "START_CRAWLER_INTERVAL_IN_SECONDS": 60
 }
