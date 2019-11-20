@@ -79,3 +79,7 @@ SEED_INVEST_DOMAIN = "https://www.seedinvest.com"
 
 def url_offering():
     return join_all(SEED_INVEST_DOMAIN, "offerings")
+
+
+def url_project(project_id):
+    return join_all(SEED_INVEST_DOMAIN, project_id)
