@@ -17,25 +17,6 @@ if not config.is_aws_lambda_runtime():
     os.environ["AWS_DEFAULT_PROFILE"] = config.AWS_PROFILE_FOR_PYTHON.get_value()
 
 
-# @attr.s
-# class Details(AttrsClass):
-#     issuer = attr.ib(default=NOTHING)
-#     issuer = attr.ib(default=NOTHING)
-#     issuer = attr.ib(default=NOTHING)
-#     issuer = attr.ib(default=NOTHING)
-#     issuer = attr.ib(default=NOTHING)
-#     issuer = attr.ib(default=NOTHING)
-#     issuer = attr.ib(default=NOTHING)
-#     issuer = attr.ib(default=NOTHING)
-#     issuer = attr.ib(default=NOTHING)
-#     issuer = attr.ib(default=NOTHING)
-#     issuer = attr.ib(default=NOTHING)
-#     issuer = attr.ib(default=NOTHING)
-#     issuer = attr.ib(default=NOTHING)
-#     issuer = attr.ib(default=NOTHING)
-#     issuer = attr.ib(default=NOTHING)
-
-
 class Startup(Model):
     class Meta:
         table_name = config.DYNAMODB_TABLE_STARTUP.get_value()

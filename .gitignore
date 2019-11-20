@@ -7,6 +7,8 @@ config/config-raw.json
 config/config-final-for-cloudformation.json
 config/config-final-for-python.json
 
+playground/*
+
 master.json
 *.html
 
