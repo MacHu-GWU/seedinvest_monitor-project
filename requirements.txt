@@ -3,4 +3,8 @@ pymongo_mate==0.0.4
 mongoengine_mate==0.0.4
 troposphere_mate==0.0.11
 pynamodb==4.2.0
+attrs_mate==0.0.5
+attrs==19.3.0
+beautifulsoup4==4.8.1
+sfm==0.0.17
 boto3

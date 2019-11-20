@@ -43,19 +43,11 @@ dynamodb_table_startup = dynamodb.Table(
             AttributeName="id",
             KeyType="HASH",
         ),
-        dynamodb.KeySchema(
-            AttributeName="create_at",
-            KeyType="RANGE",
-        ),
     ],
     BillingMode="PAY_PER_REQUEST",
     AttributeDefinitions=[
         dynamodb.AttributeDefinition(
             AttributeName="id",
-            AttributeType="S",
-        ),
-        dynamodb.AttributeDefinition(
-            AttributeName="create_at",
             AttributeType="S",
         ),
     ]
