@@ -3,7 +3,6 @@
 from datetime import datetime, timedelta
 from superjson import json
 from sfm.fingerprint import fingerprint
-from seedinvest_monitor.crawler import url_builder, html_parser
 from seedinvest_monitor.boto_ses import boto_ses
 from seedinvest_monitor.model import Startup
 from seedinvest_monitor.devops.config_init import config

@@ -4,15 +4,20 @@ from superjson import json
 
 from seedinvest_monitor.boto_ses import boto_ses
 from seedinvest_monitor.queue_item import QueueItem
+from seedinvest_monitor.devops.config_init import config
 
 sqs_client = boto_ses.client("sqs")
 
 
 def handler(event, context):
-    record = event["Records"][0]
-    receipt_handle = record["receiptHandle"]
-    queue_item = QueueItem.from_dict(json.loads(record["body"]))
-    queue_item.process()
+    records = event["Records"]
+    for record in records:
+        queue_item = QueueItem.from_dict(json.loads(record["body"]))
+        queue_item.process(
+            sqs_client=sqs_client,
+            record=record,
+            config=config,
+        )
 
 
 if __name__ == "__main__":

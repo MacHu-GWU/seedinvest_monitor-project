@@ -5,8 +5,8 @@ Cloudformation Template Generation
 """
 
 from troposphere_mate import (
-    Template, GetAtt,
-    sqs, events, iam, dynamodb,
+    Template, Ref,
+    sqs, iam, dynamodb, awslambda, events,
     canned,
     helper_fn_sub,
 )
@@ -56,24 +56,140 @@ dynamodb_table_startup = dynamodb.Table(
 sqs_queue = sqs.Queue(
     "SQSQueueScheduler",
     template=template,
-    QueueName=config.DYNAMODB_TABLE_STARTUP.get_value(),
+    QueueName=helper_fn_sub("{}-download-job", param_env_name),
     VisibilityTimeout=30,
 )
 
-# event_rule = events.Rule(
-#     "EventRule",
-#     State="ENABLED",
-#     ScheduleExpression=expression,
-#     Targets=[
-#         events.Target(
-#             Id="EventRuleStartCrawlerGitHubDataTrigger",
-#             Arn=GetAtt(self.lbd_func_aws_object, "Arn"),
-#         )
-#     ],
-#     DependsOn=[
-#         self.lbd_func_aws_object,
-#     ]
-# )
+#--- Lambda Function
+aws_lambda_func_code = awslambda.Code(
+    S3Bucket=config.S3_BUCKET_FOR_DEPLOY.get_value(),
+    S3Key=config.LAMBDA_CODE_S3_KEY.get_value()
+)
+aws_lambda_layers = config.LAMBDA_LAYERS.get_value()
+aws_lambda_environment = awslambda.Environment(
+    Variables={
+        k: v
+        for k, v in config.to_dict(prefix="SEEDINVEST_MONITOR_").items()
+        if isinstance(v, str)
+    },
+)
+
+lbd_func_update_new_project = awslambda.Function(
+    "LbdFuncUpdateNewProject",
+    template=template,
+    FunctionName=helper_fn_sub("{}-update-new-project", param_env_name),
+    Code=aws_lambda_func_code,
+    Layers=aws_lambda_layers,
+    Handler="seedinvest_monitor.handlers.update_new_project.handler",
+    MemorySize=128,
+    Timeout=120,
+    Runtime="python3.6",
+    Environment=aws_lambda_environment,
+    Role=iam_role_for_lbd_func.iam_role_arn,
+)
+
+event_rule_update_new_project = events.Rule(
+    "EventRuleUpdateNewProject",
+    template=template,
+    State="ENABLED",
+    ScheduleExpression=config.UPDATE_NEW_PROJECT_RATE.get_value(),
+    Targets=[
+        events.Target(
+            Id="EventRuleUpdateNewProject",
+            Arn=lbd_func_update_new_project.lbd_func_arn,
+        )
+    ],
+    DependsOn=[
+        lbd_func_update_new_project,
+    ]
+)
+
+lbd_permission_event_rule_update_new_project = awslambda.Permission(
+    "LbdPermissionEventRuleUpdateNewProject",
+    template=template,
+    Action="lambda:InvokeFunction",
+    FunctionName=lbd_func_update_new_project.lbd_func_arn,
+    Principal="events.amazonaws.com",
+    SourceArn=event_rule_update_new_project.event_rule_arn,
+    DependsOn=[
+        event_rule_update_new_project,
+        lbd_func_update_new_project,
+    ]
+)
+
+
+lbd_func_start_crawler = awslambda.Function(
+    "LbdFuncStartCrawler",
+    template=template,
+    FunctionName=helper_fn_sub("{}-start-crawler", param_env_name),
+    Code=aws_lambda_func_code,
+    Layers=aws_lambda_layers,
+    Handler="seedinvest_monitor.handlers.start_crawler.handler",
+    MemorySize=128,
+    Timeout=120,
+    Runtime="python3.6",
+    Environment=aws_lambda_environment,
+    Role=iam_role_for_lbd_func.iam_role_arn,
+)
+
+event_rule_start_crawler = events.Rule(
+    "EventRuleStartCrawler",
+    template=template,
+    State="ENABLED",
+    ScheduleExpression=config.START_CRAWLER_RATE.get_value(),
+    Targets=[
+        events.Target(
+            Id="EventRuleStartCrawler",
+            Arn=lbd_func_start_crawler.lbd_func_arn,
+        )
+    ],
+    DependsOn=[
+        lbd_func_start_crawler,
+    ]
+)
+
+lbd_permission_event_rule_start_crawler = awslambda.Permission(
+    "LbdPermissionEventRuleStartCrawler",
+    template=template,
+    Action="lambda:InvokeFunction",
+    FunctionName=lbd_func_start_crawler.lbd_func_arn,
+    Principal="events.amazonaws.com",
+    SourceArn=event_rule_start_crawler.event_rule_arn,
+    DependsOn=[
+        event_rule_start_crawler,
+        lbd_func_start_crawler,
+    ]
+)
+
+
+lbd_func_worker = awslambda.Function(
+    "LbdFuncWorker",
+    template=template,
+    FunctionName=helper_fn_sub("{}-worker", param_env_name),
+    Code=aws_lambda_func_code,
+    Layers=aws_lambda_layers,
+    Handler="seedinvest_monitor.handlers.worker.handler",
+    MemorySize=128,
+    Timeout=120,
+    Runtime="python3.6",
+    Environment=aws_lambda_environment,
+    Role=iam_role_for_lbd_func.iam_role_arn,
+)
+
+
+sqs_event_source_mapping = awslambda.EventSourceMapping(
+    "DownloaderLambdaEventMapping",
+    template=template,
+    BatchSize=10,
+    Enabled=True,
+    EventSourceArn=sqs_queue.sqs_queue_arn,
+    FunctionName=Ref(lbd_func_worker),
+    DependsOn=[
+        sqs_queue,
+        lbd_func_worker,
+    ]
+)
+
 
 # --- post process ---
 common_tags = {

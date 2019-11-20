@@ -71,4 +71,4 @@ class Config(ConfigClass):
 
     HTML_UPDATE_INTERVAL_IN_SECONDS = Constant()
 
-    START_CRAWLER_INTERVAL_IN_SECONDS = Constant()
+    START_CRAWLER_RATE = Constant()
