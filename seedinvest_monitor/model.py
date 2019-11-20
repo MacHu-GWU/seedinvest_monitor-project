@@ -79,5 +79,8 @@ if __name__ == "__main__":
     #     print(1)
     # event.update(actions=[Event.value.set(3)])
 
-    startup = Startup.get("hitch")
+    startup = Startup.get("have.need")
+    from pathlib_mate import Path
     print(startup.raw_html)
+
+    Path("test.html").write_text(startup.raw_html, encoding="utf-8")

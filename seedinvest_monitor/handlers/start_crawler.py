@@ -12,13 +12,12 @@ sqs_client = boto_ses.client("sqs")
 
 
 def handler(event, context):
-    update_html_earilier_than = str(datetime.utcnow() - timedelta(seconds=config.HTML_UPDATE_INTERVAL_IN_SECONDS.get_value()))
+    update_html_earilier_than = str(datetime.utcnow() - timedelta(seconds=int(config.HTML_UPDATE_INTERVAL_IN_SECONDS.get_value())))
     result_iterator = Startup.scan(
         Startup.html_download_at < update_html_earilier_than,
         limit=10,
         attributes_to_get=[
             "id",
-            "project_create_at",
             "html_download_at",
             "details_update_at",
         ],

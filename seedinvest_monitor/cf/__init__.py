@@ -57,7 +57,7 @@ sqs_queue = sqs.Queue(
     "SQSQueueScheduler",
     template=template,
     QueueName=helper_fn_sub("{}-download-job", param_env_name),
-    VisibilityTimeout=30,
+    VisibilityTimeout=180,
 )
 
 #--- Lambda Function
@@ -70,7 +70,7 @@ aws_lambda_environment = awslambda.Environment(
     Variables={
         k: v
         for k, v in config.to_dict(prefix="SEEDINVEST_MONITOR_").items()
-        if isinstance(v, str)
+        if isinstance(v, (str, int))
     },
 )
 

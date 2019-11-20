@@ -2,10 +2,15 @@
 
 import pytest
 from pytest import raises, approx
+from superjson import json
 import requests
 from pathlib_mate import Path
 from sfm.fingerprint import fingerprint
 from seedinvest_monitor.crawler import html_parser
+
+
+def jprint(data):
+    print(json.dumps(data, indent=4, sort_keys=True))
 
 
 def get_html(url):
@@ -29,12 +34,16 @@ def get_html(url):
     return html
 
 
-def test_parse_offering_page():
-    results = html_parser.parse_offering_page(get_html("https://www.seedinvest.com/offerings"))
-    assert len(results) >= 10
+# def test_parse_offering_page():
+#     results = html_parser.parse_offering_page(get_html("https://www.seedinvest.com/offerings"))
+#     assert len(results) >= 10
 
 def test_parse_project_page():
-    result = html_parser.parse_project_page(get_html("https://www.seedinvest.com/nowrx/series.b"))
+    result = html_parser.parse_project_page(get_html("https://www.seedinvest.com/nowrx"))
+    jprint(result)
+
+    # result = html_parser.parse_project_page(get_html("https://www.seedinvest.com/have.need"))
+    # jprint(result)
 
 
 if __name__ == "__main__":
