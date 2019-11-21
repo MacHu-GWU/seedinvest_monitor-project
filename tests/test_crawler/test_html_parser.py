@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-from pytest import raises, approx
-from superjson import json
 import requests
 from pathlib_mate import Path
 from sfm.fingerprint import fingerprint
+from superjson import json
+
 from seedinvest_monitor.crawler import html_parser
 
 
@@ -34,15 +34,16 @@ def get_html(url):
     return html
 
 
-# def test_parse_offering_page():
-#     results = html_parser.parse_offering_page(get_html("https://www.seedinvest.com/offerings"))
-#     assert len(results) >= 10
+def test_parse_offering_page():
+    results = html_parser.parse_offering_page(get_html("https://www.seedinvest.com/offerings"))
+    assert len(results) >= 10
+
 
 def test_parse_project_page():
     result = html_parser.parse_project_page(get_html("https://www.seedinvest.com/nowrx"))
-    jprint(result)
+    # jprint(result)
 
-    # result = html_parser.parse_project_page(get_html("https://www.seedinvest.com/have.need"))
+    result = html_parser.parse_project_page(get_html("https://www.seedinvest.com/have.need"))
     # jprint(result)
 
 
