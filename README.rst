@@ -27,4 +27,8 @@
 Welcome to ``seedinvest_monitor`` Documentation
 ==============================================================================
 
-Documentation for ``seedinvest_monitor``.
+``seedinvest_monitor`` is a project that run web crawler at scale, keep monitoring www.seedinvest.com, scrap startups company data and find potential valuable startups to invest.
+
+The web crawler uses AWS Based, all serverless, distributive, scalable, architect.
+
+You can change ``config/00-config-shared.json`` and use ``devops/deploys.py`` scripts to deploy the solution to your own AWS Account.
