@@ -1,4 +1,4 @@
-requests==2.22.0
+requests==2.31.0
 troposphere_mate==0.0.11
 pynamodb==4.2.0
 attrs_mate==0.0.5
